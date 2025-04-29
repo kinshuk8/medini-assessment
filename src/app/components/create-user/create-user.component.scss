@@ -1,0 +1,172 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+.modal-dialog {
+  margin: 1.75rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+// Stepper styles
+.stepper-wrapper {
+  position: relative;
+  padding: 0 40px;
+
+  .progress {
+    position: absolute;
+    top: 24px;
+    height: 2px;
+    width: 100%;
+    background-color: #e9ecef;
+    z-index: 1;
+  }
+
+  .progress-bar {
+    background-color: #0d6efd;
+    transition: width 0.3s ease;
+  }
+
+  .step {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    width: 120px;
+
+    .step-number {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #fff;
+      border: 2px solid #e9ecef;
+      color: #6c757d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .step-label {
+      color: #6c757d;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    &.active {
+      .step-number {
+        border-color: #0d6efd;
+        color: #0d6efd;
+      }
+      .step-label {
+        color: #0d6efd;
+      }
+    }
+
+    &.completed {
+      .step-number {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        color: #fff;
+      }
+      .step-label {
+        color: #0d6efd;
+      }
+    }
+  }
+}
+
+// Form container styles
+.form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  min-height: 400px;
+}
+
+// Form control styles
+.form-control, .form-select {
+  border: 1.5px solid #dee2e6;
+  padding: 0.75rem 1rem;
+
+  &:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+  }
+}
+
+// Gender button group
+.btn-group {
+  width: 100%;
+  gap: 10px;
+
+  .btn {
+    flex: 1;
+    border-radius: 8px !important;
+  }
+}
+
+// Review details
+.review-details {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+
+  h5 {
+    color: #007bff;
+    margin-bottom: 15px;
+  }
+
+  p {
+    margin-bottom: 10px;
+    color: #495057;
+
+    strong {
+      color: #212529;
+      min-width: 100px;
+      display: inline-block;
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .stepper-wrapper {
+    padding: 0 20px;
+
+    .step {
+      width: auto;
+
+      .step-number {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+      }
+
+      .step-label {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .form-container {
+    padding: 1.5rem !important;
+  }
+
+  .btn-lg {
+    padding: 0.5rem 1.5rem;
+  }
+}
+
+.container {
+  padding-top: 80px; // Add space for fixed navbar
+}

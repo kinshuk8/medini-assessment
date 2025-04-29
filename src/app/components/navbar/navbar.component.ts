@@ -1,37 +1,36 @@
-import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+
+interface User {
+  name: string;
+  // Add other user properties as needed
+}
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
   standalone: true,
-  imports: [RouterLink, CommonModule]
+  imports: [CommonModule]
 })
-export class NavbarComponent {
-  isDropdownOpen = false;
-  currentUser: any;
+export class NavbarComponent implements OnInit {
+  currentUser: any = {};
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {
-    this.currentUser = this.authService.getCurrentUser();
-  }
+  constructor(private router: Router) {}
 
-  toggleDropdown(): void {
-    this.isDropdownOpen = !this.isDropdownOpen;
-  }
-
-  onProfileClick(): void {
-    this.isDropdownOpen = false;
-    this.router.navigate(['/profile']);
+  ngOnInit(): void {
+    // Get current user from localStorage
+    const currentUserStr = localStorage.getItem('currentUser');
+    if (currentUserStr) {
+      this.currentUser = JSON.parse(currentUserStr);
+    }
   }
 
   onLogoutClick(): void {
-    this.isDropdownOpen = false;
-    this.authService.logout();
+    // Clear all localStorage data
+    localStorage.clear();
+    // Navigate to login page
+    this.router.navigate(['/login']);
   }
 }

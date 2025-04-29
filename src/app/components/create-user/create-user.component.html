@@ -1,0 +1,156 @@
+<app-navbar></app-navbar>
+
+<div class="container py-5 mt-5">
+  <!-- Stepper -->
+  <div class="stepper-wrapper mb-5">
+    <div class="progress" role="progressbar">
+      <div class="progress-bar" [style.width]="((currentStep - 1) / 2 * 100) + '%'"></div>
+    </div>
+    <div class="d-flex justify-content-between">
+      <div class="step" [class.active]="currentStep >= 1" [class.completed]="currentStep > 1">
+        <div class="step-number">1</div>
+        <div class="step-label">Basic Details</div>
+      </div>
+      <div class="step" [class.active]="currentStep >= 2" [class.completed]="currentStep > 2">
+        <div class="step-number">2</div>
+        <div class="step-label">Personal Details</div>
+      </div>
+      <div class="step" [class.active]="currentStep === 3">
+        <div class="step-number">3</div>
+        <div class="step-label">Review</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Container -->
+  <div class="form-container bg-white rounded-4 shadow-sm p-4">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" #form="ngForm">
+      <!-- Step 1: Basic Details -->
+      <div *ngIf="currentStep === 1">
+        <h4 class="mb-4 fw-semibold">Basic Details</h4>
+        <div class="mb-4">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-control form-control-lg" formControlName="name" placeholder="Enter your name">
+          <div class="text-danger small mt-1" *ngIf="userForm.get('name')?.touched && userForm.get('name')?.errors?.['required']">
+            Name is required
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control form-control-lg" formControlName="email" placeholder="Enter your email">
+          <div class="text-danger small mt-1" *ngIf="userForm.get('email')?.touched && userForm.get('email')?.errors?.['required']">
+            Email is required
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control form-control-lg" formControlName="password" placeholder="Enter your password">
+          <div class="text-danger small mt-1" *ngIf="userForm.get('password')?.touched && userForm.get('password')?.errors?.['required']">
+            Password is required
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Personal Details -->
+      <div *ngIf="currentStep === 2">
+        <h4 class="mb-4 fw-semibold">Personal Details</h4>
+        <div class="mb-4">
+          <label class="form-label">Mobile No.</label>
+          <input type="tel" class="form-control form-control-lg" formControlName="mobileNo" placeholder="Enter mobile number">
+          <div class="text-danger small mt-1" *ngIf="userForm.get('mobileNo')?.touched && userForm.get('mobileNo')?.errors?.['required']">
+            Mobile number is required
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="form-label">Date of Birth</label>
+          <input type="date" class="form-control form-control-lg" formControlName="dob">
+          <div class="text-danger small mt-1" *ngIf="userForm.get('dob')?.touched && userForm.get('dob')?.errors?.['required']">
+            Date of birth is required
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="form-label d-block">Gender</label>
+          <div class="btn-group" role="group">
+            <input type="radio" class="btn-check" formControlName="gender" value="Male" id="genderMale">
+            <label class="btn btn-outline-primary" for="genderMale">Male</label>
+
+            <input type="radio" class="btn-check" formControlName="gender" value="Not Male" id="genderNotMale">
+            <label class="btn btn-outline-primary" for="genderNotMale">Not Male</label>
+
+            <input type="radio" class="btn-check" formControlName="gender" value="others" id="genderOthers">
+            <label class="btn btn-outline-primary" for="genderOthers">Others</label>
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="form-label">Profile Picture</label>
+          <input type="file" class="form-control form-control-lg" accept="image/*" (change)="onFileSelected($event)">
+        </div>
+        <div class="mb-4">
+          <label class="form-label">Country</label>
+          <select class="form-select form-select-lg" formControlName="country" (change)="onCountryChange()">
+            <option value="">Select Country</option>
+            <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
+          </select>
+          <div class="text-danger small mt-1" *ngIf="userForm.get('country')?.touched && userForm.get('country')?.errors?.['required']">
+            Country is required
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="form-label">State</label>
+          <select class="form-select form-select-lg" formControlName="state">
+            <option value="">Select State</option>
+            <option *ngFor="let state of states" [value]="state">{{ state }}</option>
+          </select>
+          <div class="text-danger small mt-1" *ngIf="userForm.get('state')?.touched && userForm.get('state')?.errors?.['required']">
+            State is required
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="form-label">Address</label>
+          <textarea class="form-control form-control-lg" formControlName="address" rows="3" placeholder="Enter your address"></textarea>
+          <div class="text-danger small mt-1" *ngIf="userForm.get('address')?.touched && userForm.get('address')?.errors?.['required']">
+            Address is required
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Review -->
+      <div *ngIf="currentStep === 3">
+        <h4 class="mb-4 fw-semibold">Review and Submit</h4>
+        <div class="review-details p-4 rounded-3 bg-light">
+          <div class="row g-4">
+            <div class="col-md-6">
+              <h5 class="fw-semibold mb-3">Basic Details</h5>
+              <p class="mb-2"><strong>Name:</strong> {{ userForm.get('name')?.value }}</p>
+              <p class="mb-2"><strong>Email:</strong> {{ userForm.get('email')?.value }}</p>
+            </div>
+            <div class="col-md-6">
+              <h5 class="fw-semibold mb-3">Personal Details</h5>
+              <p class="mb-2"><strong>Mobile No:</strong> {{ userForm.get('mobileNo')?.value }}</p>
+              <p class="mb-2"><strong>Date of Birth:</strong> {{ userForm.get('dob')?.value }}</p>
+              <p class="mb-2"><strong>Gender:</strong> {{ userForm.get('gender')?.value }}</p>
+              <p class="mb-2"><strong>Country:</strong> {{ userForm.get('country')?.value }}</p>
+              <p class="mb-2"><strong>State:</strong> {{ userForm.get('state')?.value }}</p>
+              <p class="mb-2"><strong>Address:</strong> {{ userForm.get('address')?.value }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="d-flex justify-content-between mt-5">
+        <button *ngIf="currentStep > 1" type="button" class="btn btn-outline-primary btn-lg px-5 rounded-pill" (click)="previousStep()">
+          Previous
+        </button>
+        <div class="ms-auto">
+          <button *ngIf="currentStep < 3" type="button" class="btn btn-primary btn-lg px-5 rounded-pill" (click)="nextStep()" [disabled]="!isCurrentStepValid()">
+            Next
+          </button>
+          <button *ngIf="currentStep === 3" type="submit" class="btn btn-success btn-lg px-5 rounded-pill" [disabled]="!userForm.valid">
+            Submit
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

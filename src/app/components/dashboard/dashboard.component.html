@@ -1,5 +1,97 @@
 <app-navbar></app-navbar>
-<div class="dashboard-container">
-  <h1>Welcome to Dashboard</h1>
-  <p>This is a protected route that requires authentication.</p>
+
+<div class="container py-5 mt-5">
+  <!-- Stats Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-4">
+      <div class="card bg-primary text-white h-100">
+        <div class="card-body">
+          <h5 class="card-title">Total Users</h5>
+          <h2 class="mb-0">{{ getTotalUsers() }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card bg-success text-white h-100">
+        <div class="card-body">
+          <h5 class="card-title">Active Users</h5>
+          <h2 class="mb-0">{{ getActiveUsers() }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card bg-warning text-white h-100">
+        <div class="card-body">
+          <h5 class="card-title">Inactive Users</h5>
+          <h2 class="mb-0">{{ getInactiveUsers() }}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Users Table -->
+  <div class="card">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="card-title mb-0">Users List</h4>
+        <button class="btn btn-primary" routerLink="/create-user">
+          <i class="fas fa-plus me-2"></i>Create User
+        </button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover text-center align-middle">
+          <thead>
+            <tr>
+              <th>Profile</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Mobile No.</th>
+              <th>Country</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users">
+              <td>
+                <img [src]="user.profilePicture || 'assets/default-avatar.png'"
+                     [alt]="user.name"
+                     class="profile-picture">
+              </td>
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.mobileNo }}</td>
+              <td>{{ user.country }}</td>
+              <td>
+                <button class="btn btn-sm"
+                        [class.btn-success]="user.status === 'active'"
+                        [class.btn-warning]="user.status === 'inactive'"
+                        (click)="toggleStatus(user)">
+                  {{ user.status }}
+                </button>
+              </td>
+              <td>
+                <div class="d-flex justify-content-center gap-2">
+                  <button class="btn btn-sm btn-outline-primary" (click)="editUser(user)">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteUser(user.id)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- No Data Message -->
+        <div *ngIf="users.length === 0" class="text-center py-5">
+          <i class="fas fa-users text-muted" style="font-size: 48px;"></i>
+          <p class="h5 text-muted mt-3">No users found</p>
+          <p class="text-muted">Click the Create User button to add a new user</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

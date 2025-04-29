@@ -1,18 +1,23 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { CreateUserComponent } from './components/create-user/create-user.component';
+import { UsersComponent } from './components/users/users.component';
+import { EditUserComponent } from './components/edit-user/edit-user.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent) },
   { path: 'register', loadComponent: () => import('./components/register/register.component').then(m => m.RegisterComponent) },
   {
     path: 'dashboard',
-    loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent),
+    component: DashboardComponent,
     canActivate: [AuthGuard]
   },
   {
-    path: 'profile',
-    loadComponent: () => import('./components/profile/profile.component').then(m => m.ProfileComponent),
+    path: 'create-user',
+    component: CreateUserComponent,
     canActivate: [AuthGuard]
-  }
+  },
+  { path: 'edit-user/:id', component: EditUserComponent }
 ];

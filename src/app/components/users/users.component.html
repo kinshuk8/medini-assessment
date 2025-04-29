@@ -1,0 +1,113 @@
+<div class="container py-4">
+  <!-- Stats Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-4">
+      <div class="card bg-primary text-white h-100">
+        <div class="card-body">
+          <h5 class="card-title">Total Users</h5>
+          <h2 class="mb-0">{{ getTotalUsers() }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card bg-success text-white h-100">
+        <div class="card-body">
+          <h5 class="card-title">Active Users</h5>
+          <h2 class="mb-0">{{ getActiveUsers() }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card bg-warning text-white h-100">
+        <div class="card-body">
+          <h5 class="card-title">Inactive Users</h5>
+          <h2 class="mb-0">{{ getInactiveUsers() }}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Users Table -->
+  <div class="card">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="card-title mb-0">Users List</h4>
+        <button mat-raised-button color="primary" routerLink="/create-user">
+          <mat-icon>add</mat-icon>
+          Create User
+        </button>
+      </div>
+
+      <div class="table-responsive">
+        <table mat-table [dataSource]="users" class="w-100">
+          <!-- Profile Picture Column -->
+          <ng-container matColumnDef="profilePicture">
+            <th mat-header-cell *matHeaderCellDef>Profile</th>
+            <td mat-cell *matCellDef="let user">
+              <img [src]="user.profilePicture || 'assets/default-avatar.png'"
+                   [alt]="user.name"
+                   class="profile-picture">
+            </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let user">{{ user.name }}</td>
+          </ng-container>
+
+          <!-- Email Column -->
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+          </ng-container>
+
+          <!-- Mobile Column -->
+          <ng-container matColumnDef="mobileNo">
+            <th mat-header-cell *matHeaderCellDef>Mobile No.</th>
+            <td mat-cell *matCellDef="let user">{{ user.mobileNo }}</td>
+          </ng-container>
+
+          <!-- Country Column -->
+          <ng-container matColumnDef="country">
+            <th mat-header-cell *matHeaderCellDef>Country</th>
+            <td mat-cell *matCellDef="let user">{{ user.country }}</td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let user">
+              <span class="badge" [ngClass]="user.status === 'active' ? 'bg-success' : 'bg-warning'">
+                {{ user.status }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let user">
+              <button mat-icon-button color="primary" [routerLink]="['/edit-user', user.id]" matTooltip="Edit User">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="deleteUser(user.id)" matTooltip="Delete User">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <!-- No Data Message -->
+        <div *ngIf="users.length === 0" class="text-center py-5">
+          <mat-icon class="text-muted" style="font-size: 48px; width: 48px; height: 48px;">people_outline</mat-icon>
+          <p class="h5 text-muted mt-3">No users found</p>
+          <p class="text-muted">Click the Create User button to add a new user</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
