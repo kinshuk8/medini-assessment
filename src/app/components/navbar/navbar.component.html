@@ -1,0 +1,21 @@
+<nav class="navbar">
+  <div class="navbar-brand">
+    <a routerLink="/dashboard">Brand</a>
+  </div>
+
+  <div class="navbar-user" *ngIf="currentUser">
+    <div class="user-dropdown" (click)="toggleDropdown()">
+      <span class="username">{{ currentUser.name }}</span>
+      <div class="dropdown-icon">▼</div>
+    </div>
+
+    <div class="dropdown-menu" *ngIf="isDropdownOpen">
+      <div class="dropdown-item" (click)="onProfileClick()">
+        Profile
+      </div>
+      <div class="dropdown-item" (click)="onLogoutClick()">
+        Logout
+      </div>
+    </div>
+  </div>
+</nav>
