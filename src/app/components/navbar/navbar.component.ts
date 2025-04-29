@@ -2,11 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
-interface User {
-  name: string;
-  // Add other user properties as needed
-}
-
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -20,10 +15,10 @@ export class NavbarComponent implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit(): void {
-    // Get current user from localStorage
-    const currentUserStr = localStorage.getItem('currentUser');
-    if (currentUserStr) {
-      this.currentUser = JSON.parse(currentUserStr);
+    // Get the first user from users list in localStorage
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    if (users.length > 0) {
+      this.currentUser = users[0];
     }
   }
 
