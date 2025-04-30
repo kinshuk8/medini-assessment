@@ -44,15 +44,14 @@ export class ApiUsersComponent implements OnInit {
     user.status = user.status === 'active' ? 'inactive' : 'active';
     this.userService.updateUser(user).subscribe({
       error: (err) => {
-        user.status = user.status === 'active' ? 'inactive' : 'active'; // Revert on error
+        user.status = user.status === 'active' ? 'inactive' : 'active'; 
         this.error = 'Failed to update user status. Please try again.';
       }
     });
   }
 
   editUser(user: User) {
-    // Navigate to edit page with user ID
-    // This will be implemented in the routing module
+
   }
 
   deleteUser(id: number) {

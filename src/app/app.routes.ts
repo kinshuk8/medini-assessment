@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CreateUserComponent } from './components/create-user/create-user.component';
-import { UsersComponent } from './components/users/users.component';
 import { EditUserComponent } from './components/edit-user/edit-user.component';
 import { ApiUsersComponent } from './components/api-users/api-users.component';
 

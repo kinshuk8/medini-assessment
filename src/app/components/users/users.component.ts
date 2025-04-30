@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatTableModule } from '@angular/material/table';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -11,14 +7,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    MatTableModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTooltipModule,
-    RouterModule
-  ]
+  imports: [CommonModule, RouterModule]
 })
 export class UsersComponent implements OnInit {
   users: any[] = [];
@@ -60,7 +49,7 @@ export class UsersComponent implements OnInit {
       const users = JSON.parse(localStorage.getItem('users') || '[]');
       const updatedUsers = users.filter((user: any) => user.id !== userId);
       localStorage.setItem('users', JSON.stringify(updatedUsers));
-      this.loadUsers(); // Reload users after deletion
+      this.loadUsers();
     }
   }
 }
