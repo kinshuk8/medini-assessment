@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../navbar/navbar.component';
 
 interface User {
@@ -23,10 +24,17 @@ interface User {
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   standalone: true,
-  imports: [CommonModule, NavbarComponent, RouterModule]
+  imports: [CommonModule, NavbarComponent, RouterModule, FormsModule]
 })
 export class DashboardComponent implements OnInit {
   users: User[] = [];
+  filteredUsers: User[] = [];
+  searchTerm: string = '';
+  selectedCountry: string = '';
+  selectedState: string = '';
+  selectedStatus: string = '';
+  uniqueCountries: string[] = [];
+  uniqueStates: string[] = [];
 
   constructor(private router: Router) {}
 
@@ -38,46 +46,63 @@ export class DashboardComponent implements OnInit {
     const storedUsers = localStorage.getItem('users');
     if (storedUsers) {
       this.users = JSON.parse(storedUsers);
-      console.log('Loaded users:', this.users); // Debug log
+      this.filteredUsers = [...this.users];
+      this.updateUniqueValues();
     }
   }
 
+  updateUniqueValues(): void {
+    this.uniqueCountries = [...new Set(this.users.map(user => user.country))];
+    this.uniqueStates = [...new Set(this.users.map(user => user.state))];
+  }
+
+  applyFilters(): void {
+    this.filteredUsers = this.users.filter(user => {
+      const matchesSearch = !this.searchTerm ||
+        user.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        user.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        user.mobileNo.includes(this.searchTerm);
+
+      const matchesCountry = !this.selectedCountry || user.country === this.selectedCountry;
+      const matchesState = !this.selectedState || user.state === this.selectedState;
+      const matchesStatus = !this.selectedStatus || user.status === this.selectedStatus;
+
+      return matchesSearch && matchesCountry && matchesState && matchesStatus;
+    });
+  }
+
+  resetFilters(): void {
+    this.searchTerm = '';
+    this.selectedCountry = '';
+    this.selectedState = '';
+    this.selectedStatus = '';
+    this.filteredUsers = [...this.users];
+  }
+
   getTotalUsers(): number {
-    return this.users.length;
+    return this.filteredUsers.length;
   }
 
   getActiveUsers(): number {
-    return this.users.filter(user => user.status === 'active').length;
+    return this.filteredUsers.filter(user => user.status === 'active').length;
   }
 
   getInactiveUsers(): number {
-    return this.users.filter(user => user.status === 'inactive').length;
+    return this.filteredUsers.filter(user => user.status === 'inactive').length;
   }
 
   toggleStatus(user: User): void {
     user.status = user.status === 'active' ? 'inactive' : 'active';
-    this.saveUsers(); // Save changes back to localStorage
+    this.saveUsers();
+    this.applyFilters(); // Reapply filters after status change
   }
 
   saveUsers(): void {
     localStorage.setItem('users', JSON.stringify(this.users));
   }
 
-  filterUsers(filter: 'all' | 'active' | 'inactive'): void {
-    const storedUsers = localStorage.getItem('users');
-    if (storedUsers) {
-      const allUsers = JSON.parse(storedUsers);
-      if (filter === 'all') {
-        this.users = allUsers;
-      } else {
-        this.users = allUsers.filter((user: User) => user.status === filter);
-      }
-    }
-  }
-
   callAPI(): void {
-    // Implement API call logic here
-    console.log('Calling API');
+    this.router.navigate(['/api-users']);
   }
 
   editUser(user: User): void {
@@ -86,10 +111,9 @@ export class DashboardComponent implements OnInit {
 
   deleteUser(userId: number): void {
     if (confirm('Are you sure you want to delete this user?')) {
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      const updatedUsers = users.filter((user: any) => user.id !== userId);
-      localStorage.setItem('users', JSON.stringify(updatedUsers));
-      this.loadUsers();
+      this.users = this.users.filter(user => user.id !== userId);
+      this.saveUsers();
+      this.applyFilters(); // Reapply filters after deletion
     }
   }
 }

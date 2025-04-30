@@ -1,7 +1,6 @@
 <app-navbar></app-navbar>
 
 <div class="container py-5 mt-5">
-  <!-- Stats Cards -->
   <div class="row g-3 mb-3 justify-content-center">
     <div class="col-md-3 text-center">
       <div class="card bg-primary text-white h-100">
@@ -37,11 +36,48 @@
     </div>
   </div>
 
-  <!-- Users Table -->
+  <div class="mb-3">
+    <div class="input-group search-box">
+      <input type="text"
+             class="form-control rounded-pill px-4"
+             placeholder="Search users..."
+             [(ngModel)]="searchTerm"
+             (input)="applyFilters()">
+      <button class="btn btn-outline-secondary rounded-pill mx-4" type="button">
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="d-flex gap-2 align-items-center mb-4">
+    <select class="form-select form-select-sm rounded-pill" [(ngModel)]="selectedCountry" (change)="applyFilters()">
+      <option value="">All Countries</option>
+      <option *ngFor="let country of uniqueCountries" [value]="country">
+        {{ country }}
+      </option>
+    </select>
+
+    <select class="form-select form-select-sm rounded-pill" [(ngModel)]="selectedState" (change)="applyFilters()">
+      <option value="">All States</option>
+      <option *ngFor="let state of uniqueStates" [value]="state">
+        {{ state }}
+      </option>
+    </select>
+
+    <select class="form-select form-select-sm rounded-pill" [(ngModel)]="selectedStatus" (change)="applyFilters()">
+      <option value="">All Status</option>
+      <option value="active">Active</option>
+      <option value="inactive">Inactive</option>
+    </select>
+
+    <button class="btn btn-sm btn-outline-secondary rounded-circle" (click)="resetFilters()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
   <div class="card">
     <div class="card-body">
-      <div class="d-flex justify-content-between align-items-center mb-3
-  ">
+      <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="card-title mb-0">Users List</h4>
         <button class="btn btn-primary" routerLink="/create-user">
           <i class="fas fa-plus me-2"></i>Create User
@@ -57,12 +93,13 @@
               <th>Email</th>
               <th>Mobile No.</th>
               <th>Country</th>
+              <th>State</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let user of users">
+            <tr *ngFor="let user of filteredUsers">
               <td>
                 <img [src]="user.profilePicture || 'assets/default-avatar.png'"
                      [alt]="user.name"
@@ -72,6 +109,7 @@
               <td>{{ user.email }}</td>
               <td>{{ user.mobileNo }}</td>
               <td>{{ user.country }}</td>
+              <td>{{ user.state }}</td>
               <td>
                 <button class="btn btn-sm"
                         [class.btn-success]="user.status === 'active'"
@@ -94,11 +132,10 @@
           </tbody>
         </table>
 
-        <!-- No Data Message -->
-        <div *ngIf="users.length === 0" class="text-center py-5">
+        <div *ngIf="filteredUsers.length === 0" class="text-center py-5">
           <i class="fas fa-users text-muted" style="font-size: 48px;"></i>
           <p class="h5 text-muted mt-3">No users found</p>
-          <p class="text-muted">Click the Create User button to add a new user</p>
+          <p class="text-muted">Try adjusting your search or filters</p>
         </div>
       </div>
     </div>
